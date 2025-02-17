@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  clang-dev:
+    build: .
+    container_name: clang-dev-container
+    ports:
+      - "2222:22"  # SSH access via host port 2222
+    volumes:
+      - code_data:/home/dev/workspace        # Persist your C code and projects
+      - nvchad_config:/home/dev/.config/nvim   # Persist NVChad configuration/plugins
+      - ~/Desktop/compsys/ssh:/home/dev/.ssh:ro  # Mount your Git/SSH config (make sure this folder exists!)
+      # Optional: Enable X11 forwarding for GUI apps (requires XQuartz on macOS)
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}  # On macOS, additional XQuartz setup may be needed
+    restart: unless-stopped
+
+volumes:
+  code_data:
+  nvchad_config:
+
